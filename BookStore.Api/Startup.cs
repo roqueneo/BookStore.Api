@@ -10,6 +10,8 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.IO;
 using System;
+using BookStore.Api.Contracts;
+using BookStore.Api.Services;
 
 namespace BookStore.Api
 {
@@ -33,6 +35,8 @@ namespace BookStore.Api
 
             ConfigureSwagger(services);
 
+            ConfigureLogger(services);
+
             services.AddControllers();
         }
 
@@ -52,6 +56,11 @@ namespace BookStore.Api
                 var xmlFilePath = Path.Combine(AppContext.BaseDirectory, xmlFileName);
                 cfg.IncludeXmlComments(xmlFilePath);
             });
+        }
+
+        private void ConfigureLogger(IServiceCollection services)
+        {
+            services.AddSingleton<ILoggerService, LoggerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

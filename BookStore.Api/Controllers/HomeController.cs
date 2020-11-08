@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BookStore.Api.Contracts;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.Api.Controllers
 {
@@ -9,6 +10,13 @@ namespace BookStore.Api.Controllers
     [ApiController]
     public class HomeController : ControllerBase
     {
+        private readonly ILoggerService _logger;
+
+        public HomeController(ILoggerService logger)
+        {
+            _logger = logger;
+        }
+
         /// <summary>
         /// Get method for testing propose
         /// </summary>
@@ -16,6 +24,7 @@ namespace BookStore.Api.Controllers
         [HttpGet]
         public IActionResult Get()
         {
+            _logger.LogInfo("Hello from test endpont Book Store Api");
             return Ok("Hello from Book Store Api");
         }
     }
