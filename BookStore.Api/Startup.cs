@@ -33,11 +33,23 @@ namespace BookStore.Api
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            ConfigureCors(services);
             ConfigureSwagger(services);
-
             ConfigureLogger(services);
 
             services.AddControllers();
+        }
+
+        private void ConfigureCors(IServiceCollection services)
+        {
+            services.AddCors(cfg => {
+                cfg.AddPolicy(
+                    "CorsPolicy", 
+                    builder => builder.AllowAnyOrigin()
+                                    .AllowAnyMethod()
+                                    .AllowAnyHeader()
+                );
+            });
         }
 
         private void ConfigureSwagger(IServiceCollection services)
@@ -85,6 +97,8 @@ namespace BookStore.Api
             });
 
             app.UseHttpsRedirection();
+
+            app.UseCors("CorsPolicy");
 
             app.UseRouting();
 
