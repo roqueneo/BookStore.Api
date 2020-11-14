@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookStore.Api.Data
@@ -12,5 +9,8 @@ namespace BookStore.Api.Data
             : base(options)
         {
         }
+        public DbSet<Author> Authors { get; set; }
+        public DbSet<Book> Books { get; set; }
+
     }
 }

@@ -12,6 +12,8 @@ using System.IO;
 using System;
 using BookStore.Api.Contracts;
 using BookStore.Api.Services;
+using AutoMapper;
+using BookStore.Api.Mappings;
 
 namespace BookStore.Api
 {
@@ -34,6 +36,7 @@ namespace BookStore.Api
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             ConfigureCors(services);
+            ConfigureMappers(services);
             ConfigureSwagger(services);
             ConfigureLogger(services);
 
@@ -44,12 +47,17 @@ namespace BookStore.Api
         {
             services.AddCors(cfg => {
                 cfg.AddPolicy(
-                    "CorsPolicy", 
+                    "CorsPolicy",
                     builder => builder.AllowAnyOrigin()
                                     .AllowAnyMethod()
                                     .AllowAnyHeader()
                 );
             });
+        }
+
+        private void ConfigureMappers(IServiceCollection services)
+        {
+            services.AddAutoMapper(typeof(Maps));
         }
 
         private void ConfigureSwagger(IServiceCollection services)
