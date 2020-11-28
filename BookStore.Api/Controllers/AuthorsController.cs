@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BookStore.Api.Contracts;
+using BookStore.Api.Data;
 using BookStore.Api.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -75,5 +76,36 @@ namespace BookStore.Api.Controllers
             }
         }
 
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Create([FromBody] AuthorCreateDto authorDto)
+        {
+            try
+            {
+                if (authorDto == null)
+                {
+                    _logger.LogWarn("Empty request was submitted");
+                    return BadRequest(ModelState);
+                }
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogWarn("Author data is incomplete");
+                    return BadRequest(ModelState);
+                }
+                var author = _mapper.Map<Author>(authorDto);
+                var operationSuccess = await _authorRepository.Create(author);
+                if (!operationSuccess)
+                {
+                    _logger.LogError($"Author creation failed");
+                    return StatusCode(500, "Author creation failed");
+                }
+                return Created("Created", author);
+            }
+            catch (Exception ex)
+            {
+                return LogErrorAndBuildInternalError(ex, $"Somethig went wrong creating a new author. Please contact the Administrator");
+            }
+        }
     }
 }
