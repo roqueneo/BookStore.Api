@@ -15,16 +15,13 @@ namespace BookStore.Api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public class AuthorsController : Controller
+    public class AuthorsController : BaseController
     {
-        private readonly ILoggerService _logger;
-        private readonly IMapper _mapper;
         private readonly IAuthorRepository _authorRepository;
 
         public AuthorsController(ILoggerService logger, IMapper mapper, IAuthorRepository authorRepository)
+            : base(logger, mapper)
         {
-            _mapper = mapper;
-            _logger = logger;
             _authorRepository = authorRepository;
         }
 
@@ -68,11 +65,5 @@ namespace BookStore.Api.Controllers
             }
         }
 
-        private ObjectResult LogErrorAndBuildInternalError(Exception ex, string message)
-        {
-            _logger.LogError($"{ex.Message} - {ex.InnerException}");
-            return StatusCode(500, message);
-
-        }
     }
 }

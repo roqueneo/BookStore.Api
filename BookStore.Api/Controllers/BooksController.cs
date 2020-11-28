@@ -15,16 +15,13 @@ namespace BookStore.Api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public class BooksController : Controller
+    public class BooksController : BaseController
     {
-        private readonly ILoggerService _logger;
-        private readonly IMapper _mapper;
         private readonly IBookRepository _bookRepository;
 
         public BooksController(ILoggerService logger, IMapper mapper, IBookRepository bookRepository)
+            : base(logger, mapper)
         {
-            _mapper = mapper;
-            _logger = logger;
             _bookRepository = bookRepository;
         }
 
@@ -44,8 +41,7 @@ namespace BookStore.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{ex.Message} - {ex.InnerException}");
-                return StatusCode(500, "Somethig went wrong getting books. Please contact the Administrator");
+                return LogErrorAndBuildInternalError(ex, "Somethig went wrong getting books. Please contact the Administrator");
             }
         }
 
@@ -65,8 +61,7 @@ namespace BookStore.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{ex.Message} - {ex.InnerException}");
-                return StatusCode(500, $"Somethig went wrong getting book with id {id}. Please contact the Administrator");
+                return LogErrorAndBuildInternalError(ex, $"Somethig went wrong getting book with id {id}. Please contact the Administrator");
             }
         }
     }
