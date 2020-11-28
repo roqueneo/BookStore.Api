@@ -137,6 +137,12 @@ namespace BookStore.Api.Controllers
                     _logger.LogWarn("Author data is invalid");
                     return BadRequest(ModelState);
                 }
+                var authorExists = await _authorRepository.Exists(id);
+                if (!authorExists)
+                {
+                    _logger.LogWarn("Author with id [{id}] wasn't found.");
+                    return NotFound();
+                }
                 var author = _mapper.Map<Author>(authorDto);
                 author.Id = id;
                 var operationSuccess = await _authorRepository.Update(author);

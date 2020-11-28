@@ -27,6 +27,9 @@ namespace BookStore.Api.Services
             return await Save();
         }
 
+        public async Task<bool> Exists(int id)
+            => await _dbContext.Books.AnyAsync(a => a.Id == id);      
+
         public async Task<IList<Book>> FindAll()
             => await _dbContext.Books.ToListAsync();
 
