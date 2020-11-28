@@ -56,6 +56,11 @@ namespace BookStore.Api.Controllers
             try
             {
                 var book = await _bookRepository.FindById(id);
+                if (book == null)
+                {
+                    _logger.LogWarn($"Book with id [{id}] wasn't found");
+                    return NotFound();
+                }
                 var response = _mapper.Map<BookDto>(book);
                 return Ok(response);
             }

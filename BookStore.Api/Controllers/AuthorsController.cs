@@ -56,6 +56,11 @@ namespace BookStore.Api.Controllers
             try
             {
                 var author = await _authorRepository.FindById(id);
+                if (author == null)
+                {
+                    _logger.LogWarn($"Author with id [{id}] wasn't found");
+                    return NotFound();
+                }
                 var response = _mapper.Map<AuthorDto>(author);
                 return Ok(response);
             }

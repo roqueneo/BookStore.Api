@@ -7,7 +7,7 @@ namespace BookStore.Api.Controllers
 {
     public class BaseController : Controller
     {
-        private readonly ILoggerService _logger;
+        internal readonly ILoggerService _logger;
         internal readonly IMapper _mapper;
 
         public BaseController(ILoggerService logger, IMapper mapper)
