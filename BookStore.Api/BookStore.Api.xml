@@ -20,7 +20,14 @@
             Get Author with given id from database
             </summary>
             <param name="id">Author's id</param>
-            <returns>An author's recordf</returns>
+            <returns>An author's record</returns>
+        </member>
+        <member name="M:BookStore.Api.Controllers.AuthorsController.Create(BookStore.Api.DTOs.AuthorCreateDto)">
+            <summary>
+            Creates a new Author on database
+            </summary>
+            <param name="authorDto">Author information</param>
+            <returns>Created author</returns>
         </member>
         <member name="T:BookStore.Api.Controllers.BooksController">
             <summary>

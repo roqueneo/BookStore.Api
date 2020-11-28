@@ -52,7 +52,7 @@ namespace BookStore.Api.Controllers
         /// Get Author with given id from database
         /// </summary>
         /// <param name="id">Author's id</param>
-        /// <returns>An author's recordf</returns>
+        /// <returns>An author's record</returns>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -76,9 +76,15 @@ namespace BookStore.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Creates a new Author on database
+        /// </summary>
+        /// <param name="authorDto">Author information</param>
+        /// <returns>Created author</returns>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Create([FromBody] AuthorCreateDto authorDto)
         {
             try
