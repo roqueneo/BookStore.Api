@@ -6,10 +6,21 @@
     <members>
         <member name="T:BookStore.Api.Controllers.AuthorsController">
             <summary>
-            Endpoint used to interact with the Authors in the book store's database.
+            Controller used to interact with the Authors in the book store's database.
             </summary>
         </member>
         <member name="M:BookStore.Api.Controllers.AuthorsController.GetAll">
+            <summary>
+            Get all Authors from database
+            </summary>
+            <returns>List of authors</returns>
+        </member>
+        <member name="T:BookStore.Api.Controllers.BooksController">
+            <summary>
+            Controller used to interact with the Books in the book store's database.
+            </summary>
+        </member>
+        <member name="M:BookStore.Api.Controllers.BooksController.GetAll">
             <summary>
             Get all Authors from database
             </summary>

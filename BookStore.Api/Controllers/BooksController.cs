@@ -10,22 +10,22 @@ using System.Threading.Tasks;
 namespace BookStore.Api.Controllers
 {
     /// <summary>
-    /// Controller used to interact with the Authors in the book store's database.
+    /// Controller used to interact with the Books in the book store's database.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public class AuthorsController : Controller
+    public class BooksController : Controller
     {
         private readonly ILoggerService _logger;
         private readonly IMapper _mapper;
-        private readonly IAuthorRepository _authorRepository;
+        private readonly IBookRepository _bookRepository;
 
-        public AuthorsController(ILoggerService logger, IMapper mapper, IAuthorRepository authorRepository)
+        public BooksController(ILoggerService logger, IMapper mapper, IBookRepository bookRepository)
         {
             _mapper = mapper;
             _logger = logger;
-            _authorRepository = authorRepository;
+            _bookRepository = bookRepository;
         }
 
         /// <summary>
@@ -38,14 +38,14 @@ namespace BookStore.Api.Controllers
         {
             try
             {
-                var allAuthors = await _authorRepository.FindAll();
-                var response = _mapper.Map<IList<AuthorDto>>(allAuthors);
+                var allAuthors = await _bookRepository.FindAll();
+                var response = _mapper.Map<IList<BookDto>>(allAuthors);
                 return Ok(response);
             }
             catch (Exception ex)
             {
                 _logger.LogError($"{ex.Message} - {ex.InnerException}");
-                return StatusCode(500, "Somethig went wrong getting authors. Please contact the Administrator");
+                return StatusCode(500, "Somethig went wrong getting books. Please contact the Administrator");
             }
         }
     }
