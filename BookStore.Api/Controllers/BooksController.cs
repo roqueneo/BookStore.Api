@@ -31,6 +31,8 @@ namespace BookStore.Api.Controllers
         /// <returns>List of authors</returns>
         [HttpGet]
         [Route("")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -49,8 +51,11 @@ namespace BookStore.Api.Controllers
         /// Get Book with given id from database
         /// </summary>
         /// <param name="id">Book's id</param>
-        /// <returns></returns>
+        /// <returns>A books's record</returns>
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Get(int id)
         {
             try

@@ -20,7 +20,7 @@
             Get Author with given id from database
             </summary>
             <param name="id">Author's id</param>
-            <returns></returns>
+            <returns>An author's recordf</returns>
         </member>
         <member name="T:BookStore.Api.Controllers.BooksController">
             <summary>
@@ -38,7 +38,7 @@
             Get Book with given id from database
             </summary>
             <param name="id">Book's id</param>
-            <returns></returns>
+            <returns>A books's record</returns>
         </member>
         <member name="T:BookStore.Api.Controllers.HomeController">
             <summary>
