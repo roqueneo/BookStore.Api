@@ -48,5 +48,27 @@ namespace BookStore.Api.Controllers
                 return StatusCode(500, "Somethig went wrong getting books. Please contact the Administrator");
             }
         }
+
+        /// <summary>
+        /// Get Book with given id from database
+        /// </summary>
+        /// <param name="id">Book's id</param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            try
+            {
+                var book = await _bookRepository.FindById(id);
+                var response = _mapper.Map<BookDto>(book);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{ex.Message} - {ex.InnerException}");
+                return StatusCode(500, $"Somethig went wrong getting book with id {id}. Please contact the Administrator");
+            }
+        }
     }
+
 }
