@@ -30,8 +30,7 @@ namespace BookStore.Api.Controllers
         /// Get all Authors from database
         /// </summary>
         /// <returns>List of authors</returns>
-        [HttpGet]
-        [Route("")]
+        [HttpGet("")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAll()
@@ -107,6 +106,46 @@ namespace BookStore.Api.Controllers
                     return StatusCode(500, "Author creation failed");
                 }
                 return Created("Created", author);
+            }
+            catch (Exception ex)
+            {
+                return LogErrorAndBuildInternalError(ex, $"Somethig went wrong creating a new author. Please contact the Administrator");
+            }
+        }
+
+        /// <summary>
+        /// Updates an existing Author on database
+        /// </summary>
+        /// <param name="id">Author's id</param>
+        /// <param name="authorDto">Author's information</param>
+        /// <returns>Updated author</returns>
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Update(int id, [FromBody] AuthorCreateDto authorDto)
+        {
+            try
+            {
+                if (id < 0 || authorDto == null)
+                {
+                    _logger.LogWarn("Invalid id or empty request was submitted");
+                    return BadRequest(ModelState);
+                }
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogWarn("Author data is invalid");
+                    return BadRequest(ModelState);
+                }
+                var author = _mapper.Map<Author>(authorDto);
+                author.Id = id;
+                var operationSuccess = await _authorRepository.Update(author);
+                if (!operationSuccess)
+                {
+                    _logger.LogError($"Author update operation failed");
+                    return StatusCode(500, "Author update operation failed");
+                }
+                return NoContent();
             }
             catch (Exception ex)
             {
