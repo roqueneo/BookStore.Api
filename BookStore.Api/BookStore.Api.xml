@@ -15,6 +15,13 @@
             </summary>
             <returns>List of authors</returns>
         </member>
+        <member name="M:BookStore.Api.Controllers.AuthorsController.Get(System.Int32)">
+            <summary>
+            Get Author with given id from database
+            </summary>
+            <param name="id">Author's id</param>
+            <returns></returns>
+        </member>
         <member name="T:BookStore.Api.Controllers.BooksController">
             <summary>
             Controller used to interact with the Books in the book store's database.
@@ -25,6 +32,13 @@
             Get all Authors from database
             </summary>
             <returns>List of authors</returns>
+        </member>
+        <member name="M:BookStore.Api.Controllers.BooksController.Get(System.Int32)">
+            <summary>
+            Get Book with given id from database
+            </summary>
+            <param name="id">Book's id</param>
+            <returns></returns>
         </member>
         <member name="T:BookStore.Api.Controllers.HomeController">
             <summary>

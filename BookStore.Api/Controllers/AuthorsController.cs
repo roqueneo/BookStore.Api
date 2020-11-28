@@ -44,9 +44,35 @@ namespace BookStore.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{ex.Message} - {ex.InnerException}");
-                return StatusCode(500, "Somethig went wrong getting authors. Please contact the Administrator");
+                return LogErrorAndBuildInternalError(ex, "Somethig went wrong getting authors. Please contact the Administrator");
             }
+        }
+
+        /// <summary>
+        /// Get Author with given id from database
+        /// </summary>
+        /// <param name="id">Author's id</param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            try
+            {
+                var author = await _authorRepository.FindById(id);
+                var response = _mapper.Map<AuthorDto>(author);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return LogErrorAndBuildInternalError(ex, $"Somethig went wrong getting author with id {id}. Please contact the Administrator");
+            }
+        }
+
+        private ObjectResult LogErrorAndBuildInternalError(Exception ex, string message)
+        {
+            _logger.LogError($"{ex.Message} - {ex.InnerException}");
+            return StatusCode(500, message);
+
         }
     }
 }
