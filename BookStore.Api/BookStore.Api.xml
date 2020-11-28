@@ -35,7 +35,14 @@
             </summary>
             <param name="id">Author's id</param>
             <param name="authorDto">Author's information</param>
-            <returns>Updated author</returns>
+            <returns>Nothing</returns>
+        </member>
+        <member name="M:BookStore.Api.Controllers.AuthorsController.Delete(System.Int32)">
+            <summary>
+            Delete an existent Author in database
+            </summary>
+            <param name="id"></param>
+            <returns>Nothing</returns>
         </member>
         <member name="T:BookStore.Api.Controllers.BooksController">
             <summary>

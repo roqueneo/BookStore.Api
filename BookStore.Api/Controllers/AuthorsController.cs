@@ -118,7 +118,7 @@ namespace BookStore.Api.Controllers
         /// </summary>
         /// <param name="id">Author's id</param>
         /// <param name="authorDto">Author's information</param>
-        /// <returns>Updated author</returns>
+        /// <returns>Nothing</returns>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -149,7 +149,47 @@ namespace BookStore.Api.Controllers
             }
             catch (Exception ex)
             {
-                return LogErrorAndBuildInternalError(ex, $"Somethig went wrong creating a new author. Please contact the Administrator");
+                return LogErrorAndBuildInternalError(ex, $"Somethig went wrong updating author with id [{id}]. Please contact the Administrator");
+            }
+        }
+
+        /// <summary>
+        /// Delete an existent Author in database
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Nothing</returns>
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                if (id < 0)
+                {
+                    _logger.LogWarn("Invalid id [{id}] attempted.");
+                    return BadRequest();
+                }
+                var author = await _authorRepository.FindById(id);
+                if (author == null)
+                {
+                    _logger.LogWarn("Author with id [{id}] wasn't found.");
+                    return NotFound();
+                }
+                var operationSuccess = await _authorRepository.Delete(author);
+                if (!operationSuccess)
+                {
+                    _logger.LogError($"Author delete operation failed");
+                    return StatusCode(500, "Author delete operation failed");
+                }
+                return NoContent();
+
+            }
+            catch (Exception ex)
+            {
+                return LogErrorAndBuildInternalError(ex, $"Somethig went wrong deleting author with id [{id}]. Please contact the Administrator");
             }
         }
     }
