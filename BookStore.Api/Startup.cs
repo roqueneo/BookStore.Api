@@ -39,6 +39,7 @@ namespace BookStore.Api
             ConfigureMappers(services);
             ConfigureSwagger(services);
             ConfigureLogger(services);
+            ConfigureRepositories(services);
 
             services.AddControllers();
         }
@@ -81,6 +82,12 @@ namespace BookStore.Api
         private void ConfigureLogger(IServiceCollection services)
         {
             services.AddSingleton<ILoggerService, LoggerService>();
+        }
+
+        private void ConfigureRepositories(IServiceCollection services)
+        {
+            services.AddScoped<IAuthorRepository, AuthorRepository>();
+            services.AddScoped<IBookRepository, BookRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
