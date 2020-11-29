@@ -77,6 +77,13 @@
             <param name="bookDto">Book's information</param>
             <returns>Nothing</returns>
         </member>
+        <member name="M:BookStore.Api.Controllers.BooksController.Delete(System.Int32)">
+            <summary>
+            Delete an existent Book in database
+            </summary>
+            <param name="id"></param>
+            <returns>Nothing</returns>
+        </member>
         <member name="T:BookStore.Api.Controllers.HomeController">
             <summary>
             Home controller for testing propose

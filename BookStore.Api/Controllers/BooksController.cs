@@ -158,5 +158,46 @@ namespace BookStore.Api.Controllers
                 return LogErrorAndBuildInternalError(ex, $"Somethig went wrong updating book with id [{id}]. Please contact the Administrator");
             }
         }
+
+        /// <summary>
+        /// Delete an existent Book in database
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Nothing</returns>
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                if (id < 0)
+                {
+                    _logger.LogWarn("Invalid id [{id}] attempted.");
+                    return BadRequest();
+                }
+                var author = await _bookRepository.FindById(id);
+                if (author == null)
+                {
+                    _logger.LogWarn("Author with id [{id}] wasn't found.");
+                    return NotFound();
+                }
+                var operationSuccess = await _bookRepository.Delete(author);
+                if (!operationSuccess)
+                {
+                    _logger.LogError($"Author delete operation failed");
+                    return StatusCode(500, "Author delete operation failed");
+                }
+                return NoContent();
+
+            }
+            catch (Exception ex)
+            {
+                return LogErrorAndBuildInternalError(ex, $"Somethig went wrong deleting author with id [{id}]. Please contact the Administrator");
+            }
+        }
+
     }
 }
