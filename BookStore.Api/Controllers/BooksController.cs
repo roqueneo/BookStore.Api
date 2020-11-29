@@ -27,7 +27,7 @@ namespace BookStore.Api.Controllers
         }
 
         /// <summary>
-        /// Get all Authors from database
+        /// Get all Books from database
         /// </summary>
         /// <returns>List of authors</returns>
         [HttpGet]
@@ -37,8 +37,8 @@ namespace BookStore.Api.Controllers
         {
             try
             {
-                var allAuthors = await _bookRepository.FindAll();
-                var response = _mapper.Map<IList<BookDto>>(allAuthors);
+                var allBooks = await _bookRepository.FindAll();
+                var response = _mapper.Map<IList<BookDto>>(allBooks);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -110,6 +110,52 @@ namespace BookStore.Api.Controllers
             catch (Exception ex)
             {
                 return LogErrorAndBuildInternalError(ex, $"Somethig went wrong creating a new book. Please contact the Administrator");
+            }
+        }
+
+        /// <summary>
+        /// Updates an existing Book on database
+        /// </summary>
+        /// <param name="id">Book's id</param>
+        /// <param name="bookDto">Book's information</param>
+        /// <returns>Nothing</returns>
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Update(int id, [FromBody] BookCreateDto bookDto)
+        {
+            try
+            {
+                if (id < 0 || bookDto == null)
+                {
+                    _logger.LogWarn("Invalid id or empty request was submitted");
+                    return BadRequest(ModelState);
+                }
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogWarn("Book data is invalid");
+                    return BadRequest(ModelState);
+                }
+                var authorExists = await _bookRepository.Exists(id);
+                if (!authorExists)
+                {
+                    _logger.LogWarn("Book with id [{id}] wasn't found.");
+                    return NotFound();
+                }
+                var author = _mapper.Map<Book>(bookDto);
+                author.Id = id;
+                var operationSuccess = await _bookRepository.Update(author);
+                if (!operationSuccess)
+                {
+                    _logger.LogError($"Book update operation failed");
+                    return StatusCode(500, "Book update operation failed");
+                }
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return LogErrorAndBuildInternalError(ex, $"Somethig went wrong updating book with id [{id}]. Please contact the Administrator");
             }
         }
     }

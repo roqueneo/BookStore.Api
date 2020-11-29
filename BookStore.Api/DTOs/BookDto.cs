@@ -10,7 +10,7 @@ namespace BookStore.Api.DTOs
         public string Isbn { get; set; }
         public string Summary { get; set; }
         public string Image { get; set; }
-        public double? Price { get; set; }
+        public decimal? Price { get; set; }
         public int? AuthorId { get; set; }
         public AuthorDto Author { get; set; }
     }
@@ -20,10 +20,13 @@ namespace BookStore.Api.DTOs
         [Required]
         public string Title { get; set; }
         public int? Year { get; set; }
+        [Required]
         public string Isbn { get; set; }
+        [StringLength(500)]
         public string Summary { get; set; }
         public string Image { get; set; }
-        public double? Price { get; set; }
-        public int? AuthorId { get; set; }
+        public decimal? Price { get; set; }
+        [Required]
+        public int AuthorId { get; set; }
     }
 }
