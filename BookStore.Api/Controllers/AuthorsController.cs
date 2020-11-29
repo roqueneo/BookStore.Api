@@ -30,7 +30,7 @@ namespace BookStore.Api.Controllers
         /// Get all Authors from database
         /// </summary>
         /// <returns>List of authors</returns>
-        [HttpGet("")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAll()
@@ -102,7 +102,7 @@ namespace BookStore.Api.Controllers
                 var operationSuccess = await _authorRepository.Create(author);
                 if (!operationSuccess)
                 {
-                    _logger.LogError($"Author creation failed");
+                    _logger.LogError("Author creation failed");
                     return StatusCode(500, "Author creation failed");
                 }
                 return Created("Created", author);

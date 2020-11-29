@@ -62,6 +62,13 @@
             <param name="id">Book's id</param>
             <returns>A books's record</returns>
         </member>
+        <member name="M:BookStore.Api.Controllers.BooksController.Create(BookStore.Api.DTOs.BookCreateDto)">
+            <summary>
+            Creates a new Book on database
+            </summary>
+            <param name="bookDto">Book's data</param>
+            <returns>Created book</returns>
+        </member>
         <member name="T:BookStore.Api.Controllers.HomeController">
             <summary>
             Home controller for testing propose

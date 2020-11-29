@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BookStore.Api.Contracts;
+using BookStore.Api.Data;
 using BookStore.Api.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +31,6 @@ namespace BookStore.Api.Controllers
         /// </summary>
         /// <returns>List of authors</returns>
         [HttpGet]
-        [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAll()
@@ -74,6 +74,43 @@ namespace BookStore.Api.Controllers
                 return LogErrorAndBuildInternalError(ex, $"Somethig went wrong getting book with id {id}. Please contact the Administrator");
             }
         }
-    }
 
+        /// <summary>
+        /// Creates a new Book on database
+        /// </summary>
+        /// <param name="bookDto">Book's data</param>
+        /// <returns>Created book</returns>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Create([FromBody] BookCreateDto bookDto)
+        {
+            try
+            {
+                if (bookDto == null)
+                {
+                    _logger.LogWarn("Empty request was submitted");
+                    return BadRequest(ModelState);
+                }
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogWarn("Book data is incomplete");
+                    return BadRequest(ModelState);
+                }
+                var book = _mapper.Map<Book>(bookDto);
+                var operationSuccess = await _bookRepository.Create(book);
+                if (!operationSuccess)
+                {
+                    _logger.LogError("Book creation failed");
+                    return StatusCode(500, "Book creation failed");
+                }
+                return Created("Created", book);
+            }
+            catch (Exception ex)
+            {
+                return LogErrorAndBuildInternalError(ex, $"Somethig went wrong creating a new book. Please contact the Administrator");
+            }
+        }
+    }
 }
