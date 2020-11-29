@@ -16,11 +16,17 @@ namespace BookStore.Api.Controllers
             _logger = logger;
         }
 
+        internal string GetControllerAndActionNames()
+        {
+            var controller = ControllerContext.ActionDescriptor.ControllerName;
+            var action = ControllerContext.ActionDescriptor.ActionName;
+            return $"{controller} » {action}"; 
+        }
+
         internal ObjectResult LogErrorAndBuildInternalError(Exception ex, string message)
         {
-            _logger.LogError($"{ex.Message} - {ex.InnerException}");
+            _logger.LogError($"{GetControllerAndActionNames()}: {ex.Message} - {ex.InnerException}");
             return StatusCode(500, message);
-
         }
     }
 }
