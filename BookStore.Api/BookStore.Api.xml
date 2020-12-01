@@ -95,5 +95,10 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:BookStore.Api.Controllers.UsersController">
+            <summary>
+            Controller used to interact with the Users in the book store's database.
+            </summary>
+        </member>
     </members>
 </doc>
