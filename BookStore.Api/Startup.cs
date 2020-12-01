@@ -32,9 +32,8 @@ namespace BookStore.Api
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            ConfigureIdentity(services);
             ConfigureCors(services);
             ConfigureMappers(services);
             ConfigureSwagger(services);
@@ -42,6 +41,14 @@ namespace BookStore.Api
             ConfigureRepositories(services);
 
             services.AddControllers();
+        }
+
+        private void ConfigureIdentity(IServiceCollection services)
+        {
+            services.AddDefaultIdentity<IdentityUser>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
         }
 
         private void ConfigureCors(IServiceCollection services)
@@ -91,7 +98,7 @@ namespace BookStore.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
         {
             if (env.IsDevelopment())
             {
@@ -124,6 +131,8 @@ namespace BookStore.Api
             {
                 endpoints.MapControllers();
             });
+
+            DataSeeder.Seed(roleManager, userManager).Wait();
         }
     }
 }
