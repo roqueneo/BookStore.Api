@@ -14,6 +14,9 @@ using BookStore.Api.Contracts;
 using BookStore.Api.Services;
 using AutoMapper;
 using BookStore.Api.Mappings;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace BookStore.Api
 {
@@ -36,6 +39,7 @@ namespace BookStore.Api
             ConfigureIdentity(services);
             ConfigureCors(services);
             ConfigureMappers(services);
+            ConfigureAuthentication(services);
             ConfigureSwagger(services);
             ConfigureLogger(services);
             ConfigureRepositories(services);
@@ -48,7 +52,6 @@ namespace BookStore.Api
             services.AddDefaultIdentity<IdentityUser>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-
         }
 
         private void ConfigureCors(IServiceCollection services)
@@ -68,6 +71,22 @@ namespace BookStore.Api
             services.AddAutoMapper(typeof(Maps));
         }
 
+        private void ConfigureAuthentication(IServiceCollection services)
+        {
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(opt => {
+                    opt.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = Configuration["Jwt:Issuer"],
+                        ValidAudience = Configuration["Jwt:Issuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                    };
+                });
+        }
         private void ConfigureSwagger(IServiceCollection services)
         {
             services.AddSwaggerGen(cfg => {
